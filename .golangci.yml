@@ -1,0 +1,160 @@
+# https://golangci-lint.run/usage/configuration/#config-file
+
+run:
+  concurrency: 4
+  deadline: 2m
+  go: "1.18"
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+  gosimple:
+    go: "1.18"
+  misspell:
+    locale: US
+  funlen:
+    lines: 60
+    statements: 40
+  govet:
+    check-shadowing: true
+    enable-all: true
+    disable:
+      - fieldalignment
+  staticcheck:
+    go: "1.18"
+  stylecheck:
+    go: "1.18"
+  golint:
+    min-confidence: 0.8
+  gofmt:
+    simplify: true
+  gocyclo:
+    min-complexity: 10
+  maligned:
+    suggest-new: true
+  goimports:
+    local-prefixes: github.com/SergeySlonimsky/pow
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/SergeySlonimsky/pow)
+  dupl:
+    threshold: 100
+  lll:
+    line-length: 140
+    tab-width: 4
+  unused:
+    check-exported: true
+    go: "1.18"
+  nakedret:
+    max-func-lines: 30
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+      - opinionated
+# https://golangci-lint.run/usage/linters/
+linters:
+  disable-all: true
+  enable:
+    # MUST: detect bugs
+    - asciicheck
+    - errcheck
+    - govet
+    - exportloopref
+    - ineffassign
+    - gocritic
+    - gosec
+    - depguard
+    - staticcheck
+    - bodyclose
+    - rowserrcheck
+    - bidichk
+    - contextcheck
+    - durationcheck
+    - errchkjson
+    - exhaustive
+    - sqlclosecheck
+    - noctx
+    - nilerr
+    - makezero
+    # MUST: performance / efficient
+    - prealloc
+    # CHALLENGE: do not disable
+    - gocognit
+    - goconst
+    - nakedret
+    - gocyclo
+    - funlen
+    - gosimple
+    - misspell
+    - gofmt
+    - goimports
+    - maintidx
+    - cyclop
+    # OPTIONAL: it is good to use, but it is not strict
+    - lll
+    - deadcode
+    - dogsled
+    - dupl
+    - gochecknoinits
+    - revive
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+    - gofumpt
+    - gochecknoglobals
+    - wsl
+    - godox
+    - goprintffuncname
+    - nolintlint
+    - nestif
+    - gomodguard
+    - gomoddirectives
+    - wastedassign
+    - tparallel
+    - thelper
+    - promlinter
+    - predeclared
+    - importas
+    - goheader
+    - gci
+    - containedctx
+    - decorder
+    - errname
+    - forcetypeassert
+    - tenv
+    - nlreturn
+    - nilnil
+    - ifshort
+    - grouper
+  fast: false
+issues:
+  exclude-rules:
+    # gci complains for unknown reason:  Expected '/', Found ' '
+    - text: "Expected '/', Found ' ' at "
+      linters:
+        - gci
+    - path: .*_test.go
+      linters:
+        # it's possible to use global var in tests
+        - gochecknoglobals
+        # it's possible to have long functions in test
+        - funlen
+        # allow for long example comments in tests
+        - lll
+    # go generate may be long
+    - source: "^//go:generate "
+      linters:
+        - lll

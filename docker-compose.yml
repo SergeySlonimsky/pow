@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  server:
+    build:
+      dockerfile: ./build/server/Dockerfile
+      context: .
+      args:
+        - SERVER_PORT:${SERVER_PORT}
+    depends_on:
+      - redis
+    env_file:
+      - .env
+
+  client:
+    build:
+      dockerfile: ./build/client/Dockerfile
+      context: .
+    depends_on:
+      - server
+    env_file:
+      - .env
+
+  redis:
+    image: redis:6.2.6-alpine
+    ports:
+      - "6379:6379"
