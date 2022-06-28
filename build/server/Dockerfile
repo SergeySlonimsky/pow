@@ -4,9 +4,9 @@ WORKDIR /build
 
 COPY . .
 
-RUN go build -o app ./cmd/server
+RUN CGO_ENABLED=0 go build -o app ./cmd/server
 
-FROM alpine:3.16
+FROM scratch
 
 ARG SERVER_PORT=8083
 

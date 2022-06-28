@@ -4,9 +4,9 @@ WORKDIR /build
 
 COPY . .
 
-RUN go build -o app ./cmd/client
+RUN CGO_ENABLED=0 go build -o app ./cmd/client
 
-FROM alpine:3.16
+FROM scratch
 
 COPY --from=builder /build/app /
 
